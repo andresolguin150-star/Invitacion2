@@ -118,12 +118,28 @@ const envelope=document.getElementById('envelope');
 const opening=document.getElementById('opening');
 let opened=false;
 
+opening.addEventListener('click',()=>{
+  const music=document.getElementById('backgroundMusic');
+  if(music) music.play().catch(()=>{});
+});
+
 function openInvite(){
   if(opened)return;
   opened=true;
   envelope.classList.add('open');
   const music=document.getElementById('backgroundMusic');
-  if(music){ music.volume=0.28; music.play().catch(()=>{}); }
+  if(music){
+    music.volume=0.28;
+    music.currentTime=0;
+    const startMusic=()=>{
+      music.play().catch(()=>{
+        document.addEventListener('touchstart',()=>{
+          music.play().catch(()=>{});
+        },{once:true,passive:true});
+      });
+    };
+    startMusic();
+  }
   setTimeout(()=>{
     opening.classList.add('show');
   },650);
